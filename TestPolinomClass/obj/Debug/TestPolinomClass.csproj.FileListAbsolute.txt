@@ -1,0 +1,7 @@
+c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\TestPolinomClass\bin\Debug\TestPolinomClass.dll
+c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\TestPolinomClass\bin\Debug\TestPolinomClass.pdb
+c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\TestPolinomClass\bin\Debug\PolinomClass.dll
+c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\TestPolinomClass\bin\Debug\PolinomClass.pdb
+c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\TestPolinomClass\obj\Debug\TestPolinomClass.csprojResolveAssemblyReference.cache
+c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\TestPolinomClass\obj\Debug\TestPolinomClass.dll
+c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\TestPolinomClass\obj\Debug\TestPolinomClass.pdb
