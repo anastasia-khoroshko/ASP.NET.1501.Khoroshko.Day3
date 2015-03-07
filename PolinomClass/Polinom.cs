@@ -6,15 +6,23 @@ using System.Threading.Tasks;
 
 namespace PolinomClass
 {
-    public class Polinom
+    public class Polinom:IEquatable<Polinom>
     {
-        private float[] factor;
-        public Polinom(params float[] arrayFactor)
+        private double[] factor;
+        private int power;
+        public Polinom(params double[] arrayFactor)
         {
             factor = arrayFactor;
+            Power = arrayFactor.Length;
+        }
+
+        public Polinom(Polinom polinom)
+        {
+            factor = polinom.factor;
+            Power = polinom.Power;
         }
         
-        public float this[int degree]
+        public double this[int degree]
         {
             get
             {
@@ -26,57 +34,75 @@ namespace PolinomClass
             }
         }
 
+        public int Power
+        {
+            get
+            {
+                return power;
+            }
+            private set
+            {
+                power = value;
+            }
+        }
+
         public static Polinom operator +(Polinom polinom1,Polinom polinom2)
         {
-            Polinom result = new Polinom(new float[Math.Max(polinom1.factor.Length, polinom2.factor.Length)]);
-            if(polinom1.factor.Length>=polinom2.factor.Length)
+            Polinom result = new Polinom(new double[Math.Max(polinom1.Power, polinom2.Power)]);
+            if(polinom1.Power>=polinom2.Power)
             {
-                for (int i = 0; i < polinom2.factor.Length; i++)
-                    result.factor[i] = polinom1.factor[i] + polinom2.factor[i];
-                for (int j = polinom2.factor.Length; j < polinom1.factor.Length; j++)
-                    result.factor[j] = polinom1.factor[j];
+                for (int i = 0; i < polinom2.Power; i++)
+                    result[i] = polinom1[i] + polinom2[i];
+                for (int j = polinom2.Power; j < polinom1.Power; j++)
+                    result[j] = polinom1[j];
             }
             else
             {
-                for (int i = 0; i < polinom1.factor.Length; i++)
-                    result.factor[i] = polinom1.factor[i] + polinom2.factor[i];
-                for (int i = polinom1.factor.Length + 1; i < polinom2.factor.Length; i++)
-                    result.factor[i] = polinom2.factor[i];
+                for (int i = 0; i < polinom1.Power; i++)
+                    result[i] = polinom1[i] + polinom2[i];
+                for (int i = polinom1.Power + 1; i < polinom2.Power; i++)
+                    result[i] = polinom2[i];
             }
             return result;
         }
 
+        public static Polinom operator-(Polinom polinom)
+        {
+            Polinom tempPolinom = new Polinom(new double[polinom.Power]);
+            for (int i = 0; i < polinom.Power; i++)
+                tempPolinom[i] = -polinom[i];
+            return tempPolinom;
+        }
         public static Polinom operator -(Polinom polinom1,Polinom polinom2)
         {
-            for (int i = 0; i < polinom2.factor.Length; i++)
-                polinom2.factor[i] *= (-1);
-            return polinom1 + polinom2;
+            Polinom temp = -polinom2;
+            return polinom1 + temp;
         }
 
         public static Polinom operator *(Polinom polinom1,Polinom polinom2)
         {
-            Polinom result = new Polinom(new float[polinom1.factor.Length + polinom2.factor.Length - 1]);
-            for (int i = 0; i < polinom1.factor.Length; i++)
-                for (int j = 0; j < polinom2.factor.Length; j++)
-                    result.factor[i+j] += polinom1.factor[i] * polinom2.factor[j];
+            Polinom result = new Polinom(new double[polinom1.Power + polinom2.Power - 1]);
+            for (int i = 0; i < polinom1.Power; i++)
+                for (int j = 0; j < polinom2.Power; j++)
+                    result[i+j] += polinom1[i] * polinom2[j];
             return result;
         }
 
         public static Polinom operator / (Polinom polinom1,Polinom polinom2)
         {
             Polinom result;
-            float[] dividend = polinom1.factor;
-            if (polinom1.factor.Length >= polinom2.factor.Length)
+            double[] dividend = polinom1.factor;
+            if (polinom1.Power >= polinom2.Power)
             {
                 if (polinom1.factor.Last() == 0|| polinom2.factor.Last()==0) throw new ArithmeticException("Invalid data of polinom");
-                result = new Polinom(new float[polinom1.factor.Length - polinom2.factor.Length + 1]);
-                for (int i = 0; i < result.factor.Length; i++)
+                result = new Polinom(new double[polinom1.Power - polinom2.Power + 1]);
+                for (int i = 0; i < result.Power; i++)
                 {
-                    float tempFactor = dividend[dividend.Length - i - 1] / polinom2.factor.Last();
-                    result.factor[result.factor.Length - i - 1] = tempFactor;
-                    for (int j = 0; j < polinom2.factor.Length; j++)
+                    double tempFactor = dividend[dividend.Length - i - 1] / polinom2.factor.Last();
+                    result[result.Power - i - 1] = tempFactor;
+                    for (int j = 0; j < polinom2.Power; j++)
                     {
-                        dividend[dividend.Length - i - j - 1] -= tempFactor * polinom2.factor[polinom2.factor.Length - j - 1];
+                        dividend[dividend.Length - i - j - 1] -= tempFactor * polinom2[polinom2.Power - j - 1];
                     }
                 }
             }
@@ -84,35 +110,50 @@ namespace PolinomClass
             return result;
         }
 
-        public static bool operator==(Polinom polinom1,Polinom polinom2)
+        public override bool Equals(object obj)
         {
-            if(polinom1.factor.Length==polinom2.factor.Length)
+            if (!(obj is Polinom))
+                return false;
+
+            return Equals((Polinom)obj);
+        }
+        public bool Equals(Polinom polinom)
+        {
+            if (Power == polinom.Power)
             {
-                for(int i=0;i<polinom1.factor.Length;i++)
-                    if(polinom1.factor[i]!=polinom2.factor[i]) return false;
-                return true;               
+                for (int i = 0; i <Power; i++)
+                    if (this[i] != polinom[i]) return false;
+                return true;
             }
             return false;
         }
 
-        public override bool Equals(object obj)
+        public static bool operator ==(Polinom polinom1, Polinom polinom2)
         {
-            if (obj == null) return false;
-            if (this.GetType() != obj.GetType()) return false;
-            return this == obj;
+            return polinom1.Equals(polinom2);
         }
         public static bool operator !=(Polinom polinom1, Polinom polinom2)
         {
-            if ((polinom1 == polinom2)) return false;
-            return true;
+            return !polinom1.Equals(polinom2);
         }
-
+        public override int GetHashCode()
+        {
+            int num=0;
+            if(factor==null) return base.GetHashCode();
+            for(int i=0;i<Power;i++)
+                num=num*33+factor[i].GetHashCode();
+            return num;
+        }
         public override string ToString()
         {
-            string polinomStr=this.factor.Last()+"*x^"+(this.factor.Length-1);
-            for(int i=this.factor.Length-2;i>=0;i--)
-                polinomStr+="+"+this.factor[i]+"*x^"+i;
+            string polinomStr=this.factor.Last()+"*x^"+(this.Power-1);
+            for(int i=this.Power-2;i>=0;i--)
+                polinomStr+="+"+this[i]+"*x^"+i;
             return polinomStr;
         }
+      
+        
+
+   
     }
 }

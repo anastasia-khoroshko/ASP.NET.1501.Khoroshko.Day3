@@ -1,5 +1,4 @@
 c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\PolinomClass\bin\Debug\PolinomClass.dll
 c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\PolinomClass\bin\Debug\PolinomClass.pdb
-c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\PolinomClass\obj\Debug\PolinomClass.csprojResolveAssemblyReference.cache
 c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\PolinomClass\obj\Debug\PolinomClass.dll
 c:\users\user\documents\visual studio 2013\Projects\ASP.NET.1501.Khoroshko.Day3\PolinomClass\obj\Debug\PolinomClass.pdb
