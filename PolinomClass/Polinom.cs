@@ -24,15 +24,6 @@ namespace PolinomClass
                 return arrayFactor;
             }
         }
-        public string PrintPolinom()
-        {
-            string printStr=null;
-            for (int i = 0; i <= this.degree;i++ )
-            {
-                printStr += this.arrayFactor[i] + "*x^" + i;
-            }
-            return printStr.ToString();
-        }
 
         public static Polinom operator +(Polinom polinom1,Polinom polinom2)
         {
