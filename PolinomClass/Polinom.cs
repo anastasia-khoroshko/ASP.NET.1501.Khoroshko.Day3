@@ -9,27 +9,29 @@ namespace PolinomClass
     public class Polinom:IEquatable<Polinom>
     {
         private double[] factor;
-        private int power;
+
         public Polinom(params double[] arrayFactor)
         {
-            factor = arrayFactor;
-            Power = arrayFactor.Length;
+            if (arrayFactor == null) throw new ArgumentNullException("Factor is null");
+            factor = new double[arrayFactor.Length];
+            Array.Copy(arrayFactor, factor,arrayFactor.Length);
         }
 
-        public Polinom(Polinom polinom)
+        public Polinom(int degree)
         {
-            factor = polinom.factor;
-            Power = polinom.Power;
-        }
+            factor = new double[degree];
+        }        
         
         public double this[int degree]
         {
             get
             {
+                if (degree < 0 || degree > Power - 1) throw new InvalidOperationException("Invalid operation");
                 return factor[degree];
             }
-            set
+            private set
             {
+                if (degree < 0 || degree > Power - 1) throw new InvalidOperationException("Invalid operation");
                 factor[degree] = value;
             }
         }
@@ -38,17 +40,16 @@ namespace PolinomClass
         {
             get
             {
-                return power;
-            }
-            private set
-            {
-                power = value;
+                return factor.Length;
             }
         }
 
         public static Polinom operator +(Polinom polinom1,Polinom polinom2)
         {
-            Polinom result = new Polinom(new double[Math.Max(polinom1.Power, polinom2.Power)]);
+            if (Object.Equals(polinom1,null) || Object.Equals(polinom2,null)) throw new ArgumentNullException("Can not sum null polinoms");
+            Polinom result;
+            result = polinom1.Power > polinom2.Power ? new Polinom(polinom1.Power) : new Polinom(polinom2.Power);
+           
             if(polinom1.Power>=polinom2.Power)
             {
                 for (int i = 0; i < polinom2.Power; i++)
@@ -68,20 +69,23 @@ namespace PolinomClass
 
         public static Polinom operator-(Polinom polinom)
         {
-            Polinom tempPolinom = new Polinom(new double[polinom.Power]);
+            if(Object.Equals(polinom,null)) throw new ArgumentNullException("Can not sub null polinom");
+            Polinom tempPolinom = new Polinom(polinom.Power);
             for (int i = 0; i < polinom.Power; i++)
                 tempPolinom[i] = -polinom[i];
             return tempPolinom;
         }
         public static Polinom operator -(Polinom polinom1,Polinom polinom2)
         {
+            if (Object.Equals(polinom1, null) || Object.Equals(polinom2, null)) throw new ArgumentNullException("Can not sub null polinoms");
             Polinom temp = -polinom2;
             return polinom1 + temp;
         }
 
         public static Polinom operator *(Polinom polinom1,Polinom polinom2)
         {
-            Polinom result = new Polinom(new double[polinom1.Power + polinom2.Power - 1]);
+            if (Object.Equals(polinom1,null) || Object.Equals(polinom2,null)) throw new ArgumentNullException("Can not mul null polinoms");
+            Polinom result = new Polinom(polinom1.Power + polinom2.Power - 1);
             for (int i = 0; i < polinom1.Power; i++)
                 for (int j = 0; j < polinom2.Power; j++)
                     result[i+j] += polinom1[i] * polinom2[j];
@@ -90,12 +94,17 @@ namespace PolinomClass
 
         public static Polinom operator / (Polinom polinom1,Polinom polinom2)
         {
+            if (Object.Equals(polinom1, null) || Object.Equals(polinom2, null)) throw new ArgumentNullException("Can not sum null polinom");
+            for(int i=0;i<polinom2.Power;i++)
+            {
+                if (polinom2[i] == 0) throw new DivideByZeroException();
+            }
             Polinom result;
             double[] dividend = polinom1.factor;
             if (polinom1.Power >= polinom2.Power)
             {
                 if (polinom1.factor.Last() == 0|| polinom2.factor.Last()==0) throw new ArithmeticException("Invalid data of polinom");
-                result = new Polinom(new double[polinom1.Power - polinom2.Power + 1]);
+                result = new Polinom(polinom1.Power - polinom2.Power + 1);
                 for (int i = 0; i < result.Power; i++)
                 {
                     double tempFactor = dividend[dividend.Length - i - 1] / polinom2.factor.Last();
@@ -119,6 +128,7 @@ namespace PolinomClass
         }
         public bool Equals(Polinom polinom)
         {
+            if (Object.Equals(polinom,null)) throw new ArgumentNullException("Can not equals null polinom");
             if (Power == polinom.Power)
             {
                 for (int i = 0; i <Power; i++)
@@ -130,6 +140,7 @@ namespace PolinomClass
 
         public static bool operator ==(Polinom polinom1, Polinom polinom2)
         {
+            if (Object.Equals(polinom1, null) || Object.Equals(polinom2, null)) throw new ArgumentNullException("Can not equals null polinoms");
             return polinom1.Equals(polinom2);
         }
         public static bool operator !=(Polinom polinom1, Polinom polinom2)

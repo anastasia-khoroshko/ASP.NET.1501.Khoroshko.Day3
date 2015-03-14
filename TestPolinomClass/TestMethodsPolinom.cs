@@ -70,10 +70,26 @@ namespace TestPolinomClass
         [TestMethod]
         public void TestStringPolinom()
         {
-            Polinom polinom1 = new Polinom(new double[] { 1, 4, 4, 0 });
-                polinom1[3] = 2;
-                Assert.AreEqual<string>(polinom1.ToString(), "2*x^3+4*x^2+4*x^1+1*x^0");
+            Polinom polinom1 = new Polinom(new double[] { 1, 4, 4, 2 });
+            Assert.AreEqual<string>(polinom1.ToString(), "2*x^3+4*x^2+4*x^1+1*x^0");
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(DivideByZeroException))]
+        public void TestDivPolinomException2()
+        {
+            Polinom polinom1 = new Polinom(new double[] { 1, 1, 1 });
+            Polinom polinom2 = new Polinom(new double[] { 1, 0, 1 });
+            Polinom result = polinom1 / polinom2;
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestSumPolinomException()
+        {
+            Polinom polinom1 = new Polinom(new double[] { 1, 1, 1 });
+            Polinom polinom2 = null;
+            Polinom result = polinom1 + polinom2;
+        }
     }
 }
